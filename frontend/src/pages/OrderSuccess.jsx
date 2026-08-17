@@ -5,6 +5,7 @@ export default function OrderSuccess() {
   const { state } = useLocation();
   const order = state?.order;
 
+  
   return (
     <div className="container-page py-20 text-center">
       <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl">
