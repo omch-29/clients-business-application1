@@ -1,5 +1,6 @@
 import Order, { ORDER_STATUSES, PAYMENT_METHODS } from "../models/Order.js";
 import Product from "../models/Product.js";
+import { sendTelegramMessage, formatOrderMessage } from "../utils/telegram.js";
 
 export async function createOrder(req, res) {
   const { items, customer, paymentMethod } = req.body;
@@ -44,6 +45,10 @@ export async function createOrder(req, res) {
     customer,
     paymentMethod,
     totalAmount,
+  });
+
+  sendTelegramMessage(formatOrderMessage(order)).catch((err) => {
+    console.error("Failed to send Telegram order notification:", err.message);
   });
 
   res.status(201).json(order);
