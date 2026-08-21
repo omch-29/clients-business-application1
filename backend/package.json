@@ -4,9 +4,13 @@
   "private": true,
   "type": "module",
   "description": "API for broom e-commerce site (products, orders, admin auth, Cloudinary uploads)",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "nodemon src/server.js",
-    "start": "node src/server.js"
+    "start": "node src/server.js",
+    "test-telegram": "node src/utils/testTelegram.js"
   },
   "dependencies": {
     "cloudinary": "^2.4.0",
