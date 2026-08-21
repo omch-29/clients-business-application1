@@ -40,7 +40,8 @@ npm run dev
 It runs on `http://localhost:5000` by default.
 
 ### Optional: Telegram order notifications
-
+https://api.telegram.org/bot
+Open BotFather → /mybots → select @Hs_khandwabot → API Token → generate/retrieve a fresh token.
 Get pinged on Telegram the instant a customer places an order.
 
 1. In Telegram, message **@BotFather**, send `/newbot`, and follow the prompts. It gives you a **bot token** — put it in `backend/.env` as `TELEGRAM_BOT_TOKEN`.
