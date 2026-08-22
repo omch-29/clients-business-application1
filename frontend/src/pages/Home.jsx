@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import client from "../api/client";
 import ProductCard from "../components/ProductCard";
 import Spinner from "../components/Spinner";
-import { CATEGORIES, SITE_NAME, SITE_TAGLINE } from "../config";
+import { CATEGORIES, SITE_NAME, SITE_TAGLINE, SUBCATEGORIES } from "../config";
 
 const TABS = ["All", ...CATEGORIES];
 
@@ -12,6 +12,14 @@ export default function Home() {
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState("All");
+  const [activeSubcategory, setActiveSubcategory] = useState("All");
+
+  const subTabs = SUBCATEGORIES[activeCategory];
+
+  function selectCategory(cat) {
+    setActiveCategory(cat);
+    setActiveSubcategory("All");
+  }
 
   useEffect(() => {
     let ignore = false;
@@ -37,11 +45,13 @@ export default function Home() {
     const q = search.trim().toLowerCase();
     return products.filter((p) => {
       const matchesCategory = activeCategory === "All" || p.category === activeCategory;
+      const matchesSubcategory =
+        activeSubcategory === "All" || p.subcategory === activeSubcategory;
       const matchesSearch =
         !q || p.name.toLowerCase().includes(q) || p.category?.toLowerCase().includes(q);
-      return matchesCategory && matchesSearch;
+      return matchesCategory && matchesSubcategory && matchesSearch;
     });
-  }, [products, search, activeCategory]);
+  }, [products, search, activeCategory, activeSubcategory]);
 
   return (
     <div>
@@ -67,11 +77,11 @@ export default function Home() {
         </div>
 
         {!loading && (
-          <div className="mb-6 flex flex-wrap gap-2">
+          <div className="mb-3 flex flex-wrap gap-2">
             {TABS.map((cat) => (
               <button
                 key={cat}
-                onClick={() => setActiveCategory(cat)}
+                onClick={() => selectCategory(cat)}
                 className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
                   activeCategory === cat
                     ? "bg-amber-700 text-white"
@@ -79,6 +89,24 @@ export default function Home() {
                 }`}
               >
                 {cat}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {!loading && subTabs && (
+          <div className="mb-6 flex flex-wrap gap-2 pl-2">
+            {["All", ...subTabs].map((sub) => (
+              <button
+                key={sub}
+                onClick={() => setActiveSubcategory(sub)}
+                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                  activeSubcategory === sub
+                    ? "bg-amber-200 text-amber-900"
+                    : "bg-stone-50 text-stone-500 hover:bg-stone-100"
+                }`}
+              >
+                {sub}
               </button>
             ))}
           </div>

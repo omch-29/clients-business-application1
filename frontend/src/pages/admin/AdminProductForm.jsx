@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import client from "../../api/client";
 import Spinner from "../../components/Spinner";
-import { CATEGORIES } from "../../config";
+import { CATEGORIES, SUBCATEGORIES } from "../../config";
 
 const emptyForm = {
   name: "",
@@ -11,6 +11,7 @@ const emptyForm = {
   price: "",
   stock: "",
   category: CATEGORIES[0],
+  subcategory: "",
 };
 
 export default function AdminProductForm() {
@@ -36,6 +37,7 @@ export default function AdminProductForm() {
           price: data.price,
           stock: data.stock,
           category: data.category || CATEGORIES[0],
+          subcategory: data.subcategory || "",
         });
         setExistingImages(data.images);
       })
@@ -45,6 +47,16 @@ export default function AdminProductForm() {
 
   function handleChange(e) {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
+  }
+
+  function handleCategoryChange(e) {
+    const category = e.target.value;
+    const subOptions = SUBCATEGORIES[category];
+    setForm((f) => ({
+      ...f,
+      category,
+      subcategory: subOptions ? subOptions[0] : "",
+    }));
   }
 
   function handleFilesSelected(e) {
@@ -103,6 +115,7 @@ export default function AdminProductForm() {
         price: Number(form.price),
         stock: Number(form.stock),
         category: form.category,
+        subcategory: SUBCATEGORIES[form.category] ? form.subcategory : "",
         images: [...existingImages, ...uploadedImages],
       };
 
@@ -151,7 +164,7 @@ export default function AdminProductForm() {
             name="category"
             required
             value={form.category}
-            onChange={handleChange}
+            onChange={handleCategoryChange}
             className="input"
           >
             {CATEGORIES.map((cat) => (
@@ -161,6 +174,26 @@ export default function AdminProductForm() {
             ))}
           </select>
         </div>
+
+        {SUBCATEGORIES[form.category] && (
+          <div>
+            <label className="label" htmlFor="subcategory">Type of Broom</label>
+            <select
+              id="subcategory"
+              name="subcategory"
+              required
+              value={form.subcategory}
+              onChange={handleChange}
+              className="input"
+            >
+              {SUBCATEGORIES[form.category].map((sub) => (
+                <option key={sub} value={sub}>
+                  {sub}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           <div>
