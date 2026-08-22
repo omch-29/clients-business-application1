@@ -41,13 +41,13 @@ export async function createProduct(req, res) {
       message: "name, price and at least one image are required",
     });
   }
-  if (!CATEGORIES.includes(category)) {
+  if (category && !CATEGORIES.includes(category)) {
     return res.status(400).json({
       message: `category must be one of: ${CATEGORIES.join(", ")}`,
     });
   }
 
-  const subcategoryResult = resolveSubcategory(category, subcategory);
+  const subcategoryResult = resolveSubcategory(category || "", subcategory);
   if (!subcategoryResult.ok) {
     return res.status(400).json({ message: subcategoryResult.message });
   }
@@ -57,7 +57,7 @@ export async function createProduct(req, res) {
     description: description || "",
     price,
     stock: stock ?? 0,
-    category,
+    category: category || "",
     subcategory: subcategoryResult.value,
     images,
   });
@@ -73,7 +73,7 @@ export async function updateProduct(req, res) {
 
   const { name, description, price, stock, category, subcategory, images, isActive } = req.body;
 
-  if (category !== undefined && !CATEGORIES.includes(category)) {
+  if (category !== undefined && category !== "" && !CATEGORIES.includes(category)) {
     return res.status(400).json({
       message: `category must be one of: ${CATEGORIES.join(", ")}`,
     });

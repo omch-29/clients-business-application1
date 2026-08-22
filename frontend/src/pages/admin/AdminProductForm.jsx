@@ -10,7 +10,7 @@ const emptyForm = {
   description: "",
   price: "",
   stock: "",
-  category: CATEGORIES[0],
+  category: "",
   subcategory: "",
 };
 
@@ -36,7 +36,7 @@ export default function AdminProductForm() {
           description: data.description,
           price: data.price,
           stock: data.stock,
-          category: data.category || CATEGORIES[0],
+          category: data.category || "",
           subcategory: data.subcategory || "",
         });
         setExistingImages(data.images);
@@ -158,15 +158,15 @@ export default function AdminProductForm() {
         </div>
 
         <div>
-          <label className="label" htmlFor="category">Category</label>
+          <label className="label" htmlFor="category">Category (optional)</label>
           <select
             id="category"
             name="category"
-            required
             value={form.category}
             onChange={handleCategoryChange}
             className="input"
           >
+            <option value="">— No category —</option>
             {CATEGORIES.map((cat) => (
               <option key={cat} value={cat}>
                 {cat}

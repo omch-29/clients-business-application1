@@ -18,10 +18,12 @@ export default function ProductCard({ product }) {
       </div>
       <div className="p-4">
         <h3 className="truncate font-medium text-stone-900">{product.name}</h3>
-        <p className="mt-1 text-sm text-stone-500">
-          {product.category}
-          {product.subcategory && ` · ${product.subcategory}`}
-        </p>
+        {product.category && (
+          <p className="mt-1 text-sm text-stone-500">
+            {product.category}
+            {product.subcategory && ` · ${product.subcategory}`}
+          </p>
+        )}
         <div className="mt-3 flex items-center justify-between">
           <span className="text-lg font-semibold text-stone-900">
             {formatPrice(product.price)}

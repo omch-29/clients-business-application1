@@ -20,7 +20,7 @@ const productSchema = new mongoose.Schema(
     description: { type: String, trim: true, default: "" },
     price: { type: Number, required: true, min: 0 },
     stock: { type: Number, required: true, min: 0, default: 0 },
-    category: { type: String, required: true, trim: true, enum: CATEGORIES },
+    category: { type: String, trim: true, enum: [...CATEGORIES, ""], default: "" },
     subcategory: { type: String, trim: true, default: "" },
     images: {
       type: [imageSchema],

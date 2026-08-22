@@ -94,10 +94,12 @@ export default function ProductDetail() {
         </div>
 
         <div>
-          <p className="text-sm font-medium text-amber-700">
-            {product.category}
-            {product.subcategory && ` · ${product.subcategory}`}
-          </p>
+          {product.category && (
+            <p className="text-sm font-medium text-amber-700">
+              {product.category}
+              {product.subcategory && ` · ${product.subcategory}`}
+            </p>
+          )}
           <h1 className="mt-1 text-2xl font-bold text-stone-900 sm:text-3xl">
             {product.name}
           </h1>
