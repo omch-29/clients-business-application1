@@ -44,6 +44,7 @@ https://api.telegram.org/bot
 Open BotFather → /mybots → select @Hs_khandwabot → API Token → generate/retrieve a fresh token.
 Get pinged on Telegram the instant a customer places an order.
 
+
 1. In Telegram, message **@BotFather**, send `/newbot`, and follow the prompts. It gives you a **bot token** — put it in `backend/.env` as `TELEGRAM_BOT_TOKEN`.
 2. Search for your new bot by the username you gave it, open a chat, and send it any message (e.g. `/start`). This is required once, so the bot is allowed to message you back.
 3. Visit `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates` in a browser (with your real token in the URL) — find `"chat":{"id":...}` in the response. That number is `TELEGRAM_CHAT_ID`, put it in `backend/.env`.
