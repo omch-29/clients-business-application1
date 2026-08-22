@@ -1,5 +1,19 @@
-import Product, { CATEGORIES } from "../models/Product.js";
+import Product, { CATEGORIES, SUBCATEGORIES } from "../models/Product.js";
 import cloudinary from "../config/cloudinary.js";
+
+function resolveSubcategory(category, subcategory) {
+  const allowed = SUBCATEGORIES[category];
+  if (!allowed) {
+    return { ok: true, value: "" };
+  }
+  if (!allowed.includes(subcategory)) {
+    return {
+      ok: false,
+      message: `subcategory for ${category} must be one of: ${allowed.join(", ")}`,
+    };
+  }
+  return { ok: true, value: subcategory };
+}
 
 export async function getProducts(req, res) {
   const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
@@ -20,7 +34,7 @@ export async function getProduct(req, res) {
 }
 
 export async function createProduct(req, res) {
-  const { name, description, price, stock, category, images } = req.body;
+  const { name, description, price, stock, category, subcategory, images } = req.body;
 
   if (!name || price === undefined || !images?.length) {
     return res.status(400).json({
@@ -33,12 +47,18 @@ export async function createProduct(req, res) {
     });
   }
 
+  const subcategoryResult = resolveSubcategory(category, subcategory);
+  if (!subcategoryResult.ok) {
+    return res.status(400).json({ message: subcategoryResult.message });
+  }
+
   const product = await Product.create({
     name,
     description: description || "",
     price,
     stock: stock ?? 0,
     category,
+    subcategory: subcategoryResult.value,
     images,
   });
 
@@ -51,12 +71,22 @@ export async function updateProduct(req, res) {
     return res.status(404).json({ message: "Broom not found" });
   }
 
-  const { name, description, price, stock, category, images, isActive } = req.body;
+  const { name, description, price, stock, category, subcategory, images, isActive } = req.body;
 
   if (category !== undefined && !CATEGORIES.includes(category)) {
     return res.status(400).json({
       message: `category must be one of: ${CATEGORIES.join(", ")}`,
     });
+  }
+
+  if (category !== undefined || subcategory !== undefined) {
+    const finalCategory = category !== undefined ? category : product.category;
+    const finalSubcategory = subcategory !== undefined ? subcategory : product.subcategory;
+    const subcategoryResult = resolveSubcategory(finalCategory, finalSubcategory);
+    if (!subcategoryResult.ok) {
+      return res.status(400).json({ message: subcategoryResult.message });
+    }
+    product.subcategory = subcategoryResult.value;
   }
 
   if (name !== undefined) product.name = name;
