@@ -6,13 +6,13 @@ function resolveSubcategory(category, subcategory) {
   if (!allowed) {
     return { ok: true, value: "" };
   }
-  if (!allowed.includes(subcategory)) {
+  if (subcategory && !allowed.includes(subcategory)) {
     return {
       ok: false,
       message: `subcategory for ${category} must be one of: ${allowed.join(", ")}`,
     };
   }
-  return { ok: true, value: subcategory };
+  return { ok: true, value: subcategory || "" };
 }
 
 export async function getProducts(req, res) {

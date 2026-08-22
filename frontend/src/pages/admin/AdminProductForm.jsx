@@ -51,11 +51,10 @@ export default function AdminProductForm() {
 
   function handleCategoryChange(e) {
     const category = e.target.value;
-    const subOptions = SUBCATEGORIES[category];
     setForm((f) => ({
       ...f,
       category,
-      subcategory: subOptions ? subOptions[0] : "",
+      subcategory: "",
     }));
   }
 
@@ -177,15 +176,15 @@ export default function AdminProductForm() {
 
         {SUBCATEGORIES[form.category] && (
           <div>
-            <label className="label" htmlFor="subcategory">Type of Broom</label>
+            <label className="label" htmlFor="subcategory">Type of Broom (optional)</label>
             <select
               id="subcategory"
               name="subcategory"
-              required
               value={form.subcategory}
               onChange={handleChange}
               className="input"
             >
+              <option value="">— No type —</option>
               {SUBCATEGORIES[form.category].map((sub) => (
                 <option key={sub} value={sub}>
                   {sub}
